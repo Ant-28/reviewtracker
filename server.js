@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 const GOOGLE_TEXT_SEARCH = "https://places.googleapis.com/v1/places:searchText";
 const GOOGLE_API_KEY = process.env.GOOG_PLACES_APIKEY;
 
-app.use(express.static("frontend/"))
+app.use(express.static("frontend"));
 
 app.get("/locations/", async (req, res) => {
   let q = req.query;

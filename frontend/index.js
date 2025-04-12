@@ -37,3 +37,52 @@ document.addEventListener("DOMContentLoaded", () => {
     col3.appendChild(article);
   });
 });
+
+// Handler for search box: send text query, receive places,
+// display options in table with accept buttons
+document.getElementById("search").addEventListener("keydown", async (e) => {
+  if (e.key === "Enter") {
+    const query = e.target.value;
+    // Clear text box
+    e.target.value = "";
+
+    const params = new URLSearchParams();
+    params.append("searchText", query);
+    const response = await fetch(`/locations?${params}`);
+    if (response.status === 404) {
+      // No places found.
+      document.getElementById('business-name').textContent = "No places found...";
+    }
+
+    // At least 1 place found.
+    const data = await response.json();
+    const table = document.getElementById("results");
+    table.style.display = "block";
+    // Clear existing rows in the table
+    table.innerHTML = "";
+
+    // Populate table with places
+    data.forEach(place => {
+      const row = document.createElement("tr");
+
+      // Name column
+      const nameCell = document.createElement("td");
+      nameCell.textContent = place.fname;
+      row.appendChild(nameCell);
+
+      // Address column
+      const addressCell = document.createElement("td");
+      addressCell.textContent = place.faddr;
+      row.appendChild(addressCell);
+
+      // Button column
+      const buttonCell = document.createElement("td");
+      const selectButton = document.createElement("button");
+      selectButton.textContent = "Select";
+      buttonCell.appendChild(selectButton);
+      row.appendChild(buttonCell);
+
+      table.appendChild(row);
+    });
+  }
+} );

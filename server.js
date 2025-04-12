@@ -1,4 +1,5 @@
 // const require = NodeJS.require
+require("dotenv").config();
 const {exec} = require("node:child_process");
 const express = require("express");
 

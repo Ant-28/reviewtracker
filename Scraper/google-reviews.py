@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from sys import argv
 import time
+import os
 
 def get_reviews_by_address(address, driver):
     """
@@ -86,7 +87,7 @@ def get_reviews_by_address(address, driver):
         stars.append(rating)
 
     average_rating = sum(stars[:len(reviews)]) / len(reviews)
-
+    print(len(reviews))
     return {
         "reviews": [review.text for review in reviews],
         "text_avg_rating": round(average_rating, 2),
@@ -105,7 +106,7 @@ def main(argv):
     # "profile.managed_default_content_settings.images": 2,
     # "profile.default_content_settings.images": 2
     # }
-    options.add_argument('--disk-cache-dir=./scraper/cache')
+    options.add_argument(f'--disk-cache-dir={os.path.dirname(os.path.realpath(__file__))}')
     # options.add_experimental_option("prefs", preferences)
     driver = webdriver.Chrome(options=options)
     payload = get_reviews_by_address(argv[1], driver)

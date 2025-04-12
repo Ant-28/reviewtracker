@@ -54,7 +54,7 @@ app.post("/reviews/", async (req, res) => {
     const q = req.body;
 
     try {
-      exec(`"python3" scraper/google-reviews.py "${q.fname} ${q.faddr}"`, 
+      exec(`"python3" scraper/google_reviews.py "${q.fname} ${q.faddr}"`, 
         (error, stdout, stderr) => {
           if (error){
             console.error(error);

@@ -6,7 +6,16 @@ from selenium.common.exceptions import TimeoutException
 from sys import argv, exit, stderr
 import time
 import os
+import sys
 import json
+
+   
+
+curr_dir = os.path.dirname(os.path.realpath(__file__))
+SENTIMENTS_DIR = os.path.abspath(os.path.join(curr_dir, '..', "sentiments"))
+if not SENTIMENTS_DIR in sys.path : sys.path.append(SENTIMENTS_DIR)
+
+import google_sentiments as gsent
 
 MAX_ELEMS = 10
 
@@ -15,7 +24,7 @@ def get_reviews_by_address(address, driver):
     Function to scrape Google reviews by address.
     """
     driver.get("https://www.google.com/maps")
-    wait = WebDriverWait(driver, 15)
+    wait = WebDriverWait(driver, 30)
 
     # Wait for the search box to be present and input the address
     search_box = wait.until(EC.presence_of_element_located((By.ID, "searchboxinput")))
@@ -40,7 +49,7 @@ def get_reviews_by_address(address, driver):
     '//*[@id="QA0Szd"]/div/div/div[1]/div[2]/div/div[1]/div/div/div[2]'
     ]:
         try:
-            scrollable_element = WebDriverWait(driver, 5).until(
+            scrollable_element = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, xpath))
             )
             # Extra check to ensure it's scrollable
@@ -106,11 +115,13 @@ def get_reviews_by_address(address, driver):
 
     average_rating = sum(stars[:len(reviews)]) / len(reviews)
     # print(len(reviews))
-    return {
+    reviews_dict = {
         "reviews": [review.text for review in reviews],
         "text_avg_rating": round(average_rating, 2),
         "overall_avg_rating": float(star_rating.split(" ")[0]),
     }
+    reviews_with_sentiments = gsent.sentims(reviews_dict)
+    return reviews_with_sentiments
 
 def main(argv):
     # Set up headless browser options

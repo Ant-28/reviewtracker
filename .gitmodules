@@ -1,0 +1,3 @@
+[submodule "nrcpy"]
+	path = nrcpy
+	url = https://github.com/giulioleuci/nrc-python

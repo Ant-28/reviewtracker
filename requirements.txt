@@ -2,3 +2,4 @@ bs4
 selenium
 requests
 undetected-chromedriver==3.5.5
+emotionanalysis @ git+https://github.com/giulioleuci/nrc-python

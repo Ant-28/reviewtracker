@@ -6,6 +6,8 @@ const PORT = process.env.PORT || 3000;
 const GOOGLE_TEXT_SEARCH = "https://places.googleapis.com/v1/places:searchText";
 const GOOGLE_API_KEY = process.env.GOOG_PLACES_APIKEY;
 
+app.use(express.static("frontend/"))
+
 app.get("/locations/", async (req, res) => {
   let q = req.query;
   try {
@@ -19,7 +21,7 @@ app.get("/locations/", async (req, res) => {
       },
     });
     const search_json = await search_text.json();
-    if (Object.keys(search_json).length === 0) {
+    if (!search_json.places) {
       res.status(404).send();
     }
     console.log(search_json.places[0].formattedAddress);
@@ -31,7 +33,7 @@ app.get("/locations/", async (req, res) => {
         fname: obj.displayName.text,
       };
     });
-    res.status(200).send(newRes);
+    res.status(200).send(newRes.slice(0,10));
   } catch (error) {
     console.error(error);
   }

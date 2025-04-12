@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <title>Review Tracker</title>
+  <script src="index.js" defer></script>
+  <style>
+    progress {
+      width: 400px;
+      vertical-align: middle;
+    }
+    body {
+      background-color: #d9fffe;
+    }
+    #results {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <h2>Review Tracker</h2>
+    <input type="text" id="search" placeholder="Search for a business..." />
+    <p><strong>Business</strong>: <span id="business-name">Marianne's Ice Cream - 1020 Ocean St, Santa Cruz, CA 95060</span></p>
+
+    <table id="results"></table>
+
+    <div class="grid">
+      <div>
+        <h3>Statistics</h3>
+        <div>Google</div>&nbsp;<progress value="85" max="100"></progress>
+        <div>Yelp</div>&nbsp;<progress value="75" max="100"></progress>
+        <div>Facebook</div>&nbsp;<progress value="50" max="100"></progress>
+      </div>
+      <div>
+        <h3>Sentiment</h3>
+      </div>
+    </div>
+    <h3>Reviews</h3>
+    <div class="grid">
+      <div>
+        <h4>Google</h4>
+        <div id="col1"></div>
+      </div>
+      <div>
+        <h4>Yelp</h4>
+        <div id="col2"></div>
+      </div>
+      <div>
+        <h4>Facebook</h4>
+        <div id="col3"> </div>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>

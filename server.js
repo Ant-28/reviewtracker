@@ -36,8 +36,16 @@ app.get("/locations/", async (req, res) => {
     res.status(200).send(newRes.slice(0,10));
   } catch (error) {
     console.error(error);
+    res.status(500).send();
   }
   
+});
+
+
+app.post("/reviews/", async (req, res) => {
+    // get to neil's stuff
+    // TODO change this to 200 on completion
+    res.status(500).send();
 });
 
 app.listen(PORT, () => {

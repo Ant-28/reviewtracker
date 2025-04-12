@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-import time
 
 def get_reviews_by_address(address, driver):
     """
@@ -44,13 +43,21 @@ def get_reviews_by_address(address, driver):
         except:
             continue
 
-    # Scroll and wait for new content to load
-    for i in range(7):  # Scroll 5 times to load more reviews
+
+    # Scroll whenever the height changes.
+    previous_height = driver.execute_script("return arguments[0].scrollHeight", scrollable_element)
+
+    for _ in range(7):  # Scroll multiple times to load more reviews
+        # Scroll to the bottom of the scrollable element
         driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", scrollable_element)
-        if i == 0:
-            time.sleep(3)
-        else:
-            time.sleep(1)
+
+        # Wait for the scrollable element's height to increase
+        WebDriverWait(driver, 2).until(
+            lambda d: d.execute_script("return arguments[0].scrollHeight", scrollable_element) > previous_height
+        )
+
+        # Update the previous height for the next iteration
+        previous_height = driver.execute_script("return arguments[0].scrollHeight", scrollable_element)
 
     # Fetch reviews
     reviews = scrollable_element.find_elements(By.XPATH, '//*[@class="MyEned"]')

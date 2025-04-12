@@ -5,13 +5,22 @@ const reviews = [
   ],
   [
     "Here is a Yelp review",
-    "Best ice cream in the state"
-  ],
-  [
+    "Best ice cream in the state",
     "Facebook review here",
     "my grandkids love this place"
   ]
 ];
+
+const emojiMap = {
+  'anger': '😡',
+  'anticipation': '👀',
+  'disgust': '🤢',
+  'fear': '😨',
+  'joy': '😂',
+  'sadness': '☹️',
+  'surprise': '🤯',
+  'trust': '🤝'
+}
 
 // Wait till full page loads to run script
 document.addEventListener("DOMContentLoaded", () => {
@@ -22,19 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
     article.textContent = review;
     col1.appendChild(article);
   });
-  // Populate Yelp reviews into DOM
+  // Populate all other reviews into DOM
   const col2 = document.getElementById("col2");
   reviews[1].forEach(review => {
     const article = document.createElement("article");
     article.textContent = review;
     col2.appendChild(article);
-  });
-  // Populate Facebook reviews into DOM
-  const col3 = document.getElementById("col3");
-  reviews[2].forEach(review => {
-    const article = document.createElement("article");
-    article.textContent = review;
-    col3.appendChild(article);
   });
 });
 
@@ -92,7 +94,12 @@ document.getElementById("search").addEventListener("keydown", async (e) => {
 
 // Function to handle button click
 async function handleButtonClick(place) {
-  
+  document.getElementById('business-name').textContent = `${place.fname} -- ${place.faddr}`;
+  // Hide the table
+  document.getElementById("results").style.display = "none";
+  // Show indeterminate progress bar
+  document.getElementById("indeterminate").style.display = "block";
+
   try {
     const response = await fetch("/reviews", {
       method: "POST",
@@ -101,9 +108,34 @@ async function handleButtonClick(place) {
       },
       body: JSON.stringify(place)
     });
+    const data = await response.json();
 
-    // TODO: handle response
-    console.log(response);
+    // Hide progress bar
+    document.getElementById("indeterminate").style.display = "none";
+
+    // Populate reviews into page
+    const col1 = document.getElementById("col1");
+    col1.innerHTML = ""; // Clear existing reviews
+    data.reviews.forEach(review => {
+      const article = document.createElement("article");
+      article.textContent = review;
+      col1.appendChild(article);
+    });
+
+    // Populate overall rating amount
+    document.getElementById('google-progress').value = data.overall_avg_rating;
+
+    // Show sentiment on page.
+    // Extract top 3 sentiments
+    const topSentiments = Object.entries(data.sentiments)
+      .sort(([, a], [, b]) => b - a) // Sort by float values in descending order
+      .slice(0, 3) // Take the top 3
+      .map(([key]) => key); // Extract the keys
+    // Display the top 3 sentiments
+    document.getElementById("sentiment").textContent = `Top sentiments: \r\n
+      ${emojiMap[topSentiments[0]]} ${topSentiments[0]} (${(data.sentiments[topSentiments[0]] * 100).toFixed(2)}%) \r\n
+      ${emojiMap[topSentiments[1]]} ${topSentiments[1]} (${(data.sentiments[topSentiments[1]] * 100).toFixed(2)}%) \r\n
+      ${emojiMap[topSentiments[2]]} ${topSentiments[2]} (${(data.sentiments[topSentiments[2]] * 100).toFixed(2)}%)`;
   } catch (error) {
     console.error("Error:", error);
   }

@@ -12,9 +12,11 @@
     progress {
       width: 400px;
       vertical-align: middle;
+      height: 16px;
+      border-radius: 8px;
     }
 
-    body {
+    html {
       background-color: #d9fffe;
     }
 
@@ -23,27 +25,43 @@
       height: 16em;
       overflow: overlay;
     }
+
+    #indeterminate {
+      display: none;
+      width: 100%;
+      margin-bottom: 2em;
+    }
+
+    #sentiment {
+      line-height: 1;
+      white-space: pre;
+    }
   </style>
 </head>
 
 <body>
   <main class="container">
     <h2>Review Tracker</h2>
-    <input type="text" id="search" placeholder="Search for a business..." />
-    <p><strong>Business</strong>: <span id="business-name">Marianne's Ice Cream - 1020 Ocean St,
-        Santa Cruz, CA 95060</span></p>
+    <input autofocus type="text" id="search" placeholder="Search for your business..." />
+    <p><strong>Business</strong>:
+      <span id="business-name">
+        --
+      </span>
+    </p>
 
     <table id="results"></table>
+
+    <progress id="indeterminate"></progress>
 
     <div class="grid">
       <div>
         <h3>Statistics</h3>
-        <div>Google</div>&nbsp;<progress value="85" max="100"></progress>
-        <div>Yelp</div>&nbsp;<progress value="75" max="100"></progress>
-        <div>Facebook</div>&nbsp;<progress value="50" max="100"></progress>
+        <div>Google</div>&nbsp;<progress id="google-progress" value="3.5" max="5"></progress>
+        <div>Other</div>&nbsp;<progress id="other-progress" value="2" max="5"></progress>
       </div>
       <div>
         <h3>Sentiment</h3>
+        <p id="sentiment">--</p>
       </div>
     </div>
     <h3>Reviews</h3>
@@ -53,12 +71,8 @@
         <div id="col1"></div>
       </div>
       <div>
-        <h4>Yelp</h4>
+        <h4>Other</h4>
         <div id="col2"></div>
-      </div>
-      <div>
-        <h4>Facebook</h4>
-        <div id="col3"> </div>
       </div>
     </div>
   </main>

@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from sys import argv
+import time
 
 def get_reviews_by_address(address, driver):
     """
@@ -91,15 +93,24 @@ def get_reviews_by_address(address, driver):
         "overall_avg_rating": float(star_rating.split(" ")[0]),
     }
 
-def main():
+def main(argv):
     # Set up headless browser options
     options = webdriver.ChromeOptions()
+    options.page_load_strategy = "eager"
+    # options.add_experimental_option(
+    # "prefs", {"profile.managed_default_content_settings.images": 2}
+    # )
     # options.add_argument("--headless")
-
+    # preferences = {
+    # "profile.managed_default_content_settings.images": 2,
+    # "profile.default_content_settings.images": 2
+    # }
+    options.add_argument('--disk-cache-dir=./scraper/cache')
+    # options.add_experimental_option("prefs", preferences)
     driver = webdriver.Chrome(options=options)
-    payload = get_reviews_by_address("Chapel of the Holy Cross, 780 Chapel Rd, Sedona, AZ 86336", driver)
+    payload = get_reviews_by_address(argv[1], driver)
 
     print(payload)
 
 if __name__ == "__main__":
-    main()
+    main(argv)

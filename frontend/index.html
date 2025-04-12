@@ -13,11 +13,15 @@
       width: 400px;
       vertical-align: middle;
     }
+
     body {
       background-color: #d9fffe;
     }
+
     #results {
       display: none;
+      height: 16em;
+      overflow: overlay;
     }
   </style>
 </head>
@@ -26,7 +30,8 @@
   <main class="container">
     <h2>Review Tracker</h2>
     <input type="text" id="search" placeholder="Search for a business..." />
-    <p><strong>Business</strong>: <span id="business-name">Marianne's Ice Cream - 1020 Ocean St, Santa Cruz, CA 95060</span></p>
+    <p><strong>Business</strong>: <span id="business-name">Marianne's Ice Cream - 1020 Ocean St,
+        Santa Cruz, CA 95060</span></p>
 
     <table id="results"></table>
 

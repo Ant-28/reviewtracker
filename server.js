@@ -1,4 +1,5 @@
 // const require = NodeJS.require
+const {exec} = require("node:child_process");
 const express = require("express");
 
 const app = express();
@@ -42,9 +43,19 @@ app.get("/locations/", async (req, res) => {
 });
 
 
+// /reviews/?addrText=...
 app.post("/reviews/", async (req, res) => {
     // get to neil's stuff
     // TODO change this to 200 on completion
+
+    let q = req.query;
+    try {
+      exec(`"python3" scraper/googlegoogle-${q.addrText}`)
+    }
+    catch (error){
+        console.error(error);
+        res.status(500).send();
+    }
     res.status(500).send();
 });
 

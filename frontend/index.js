@@ -79,10 +79,31 @@ document.getElementById("search").addEventListener("keydown", async (e) => {
       const buttonCell = document.createElement("td");
       const selectButton = document.createElement("button");
       selectButton.textContent = "Select";
+      // Add event listener to the button
+      selectButton.addEventListener("click", () => handleButtonClick(place));
+
       buttonCell.appendChild(selectButton);
       row.appendChild(buttonCell);
 
       table.appendChild(row);
     });
   }
-} );
+});
+
+// Function to handle button click
+async function handleButtonClick(place) {
+  try {
+    console.log('gonna request tihs place', place);
+    const response = await fetch("/reviews", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(place)
+    });
+
+    // TODO: handle response
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}

@@ -3,9 +3,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-from sys import argv
+from sys import argv, exit, stderr
 import time
 import os
+import json
+
+MAX_ELEMS = 10
 
 def get_reviews_by_address(address, driver):
     """
@@ -28,8 +31,8 @@ def get_reviews_by_address(address, driver):
         reviews_button = wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
         reviews_button.click()
     except TimeoutException:
-        print("Failed to find reviews button")
-        return
+        print("Failed to find reviews button", file=stderr)
+        exit(1)
 
     # Scroll to load reviews
     for xpath in [
@@ -48,29 +51,44 @@ def get_reviews_by_address(address, driver):
 
 
     # Scroll whenever the height changes.
+    current_height  = -1 
     previous_height = driver.execute_script("return arguments[0].scrollHeight", scrollable_element)
+    num_reviews = 0
+    while(current_height < previous_height):  # Scroll multiple times to load more reviews
+        # Update the current height for the current iteration
+        num_curr_elems = len(scrollable_element.find_elements(By.XPATH, '//*[@class="MyEned"]'))
+        if num_curr_elems > MAX_ELEMS:
+            break
 
-    for _ in range(7):  # Scroll multiple times to load more reviews
+        current_height = driver.execute_script("return arguments[0].scrollHeight", scrollable_element)
+
         # Scroll to the bottom of the scrollable element
         driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", scrollable_element)
 
+        
+
         # Wait for the scrollable element's height to increase
-        WebDriverWait(driver, 2).until(
-            lambda d: d.execute_script("return arguments[0].scrollHeight", scrollable_element) > previous_height
-        )
+        try: 
+            WebDriverWait(driver, 2).until(
+                lambda d: d.execute_script("return arguments[0].scrollHeight", scrollable_element) > previous_height
+            )
+        except TimeoutException:
+            break
 
         # Update the previous height for the next iteration
         previous_height = driver.execute_script("return arguments[0].scrollHeight", scrollable_element)
 
     # Fetch reviews
     reviews = scrollable_element.find_elements(By.XPATH, '//*[@class="MyEned"]')
-
-    see_more_button = driver.find_elements(By.XPATH, './/button[@aria-label="See more"]')
-    for button in see_more_button:
-        try:
-            button.click()
-        except Exception as e:
-            pass
+    while (True):
+        see_more_button = driver.find_elements(By.XPATH, './/button[@aria-label="See more"]')
+        if not see_more_button:
+            break
+        for button in see_more_button:
+            try:
+                button.click()
+            except Exception as e:
+                pass
 
     # find div with role img and aria-label that contains star
 
@@ -87,7 +105,7 @@ def get_reviews_by_address(address, driver):
         stars.append(rating)
 
     average_rating = sum(stars[:len(reviews)]) / len(reviews)
-    print(len(reviews))
+    # print(len(reviews))
     return {
         "reviews": [review.text for review in reviews],
         "text_avg_rating": round(average_rating, 2),
@@ -107,11 +125,14 @@ def main(argv):
     # "profile.default_content_settings.images": 2
     # }
     options.add_argument(f'--disk-cache-dir={os.path.dirname(os.path.realpath(__file__))}')
+    # remove devtools listening
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     # options.add_experimental_option("prefs", preferences)
     driver = webdriver.Chrome(options=options)
+    # print(f"\033[31;1;{argv[1]}\033[0m", file=stderr)
     payload = get_reviews_by_address(argv[1], driver)
 
-    print(payload)
+    print(json.dumps(payload))
 
 if __name__ == "__main__":
     main(argv)

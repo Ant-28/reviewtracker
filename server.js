@@ -9,6 +9,7 @@ const GOOGLE_TEXT_SEARCH = "https://places.googleapis.com/v1/places:searchText";
 const GOOGLE_API_KEY = process.env.GOOG_PLACES_APIKEY;
 
 app.use(express.static("frontend"));
+app.use(express.json());
 
 app.get("/locations/", async (req, res) => {
   let q = req.query;
@@ -49,15 +50,31 @@ app.post("/reviews/", async (req, res) => {
     // get to neil's stuff
     // TODO change this to 200 on completion
 
-    let q = req.query;
+
+    const q = req.body;
+
     try {
-      exec(`"python3" scraper/googlegoogle-${q.addrText}`)
+      exec(`"python3" scraper/google-reviews.py "${q.fname} ${q.faddr}"`, 
+        (error, stdout, stderr) => {
+          if (error){
+            console.error(error);
+            console.error("∃ error")
+            res.status(500).send();
+          }
+          else{
+            
+            console.error(stderr);
+            res.status(200).send(JSON.parse(stdout));
+          }
+          
+        }
+      );
     }
     catch (error){
         console.error(error);
         res.status(500).send();
     }
-    res.status(500).send();
+    
 });
 
 app.listen(PORT, () => {

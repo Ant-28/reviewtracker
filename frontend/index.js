@@ -92,8 +92,8 @@ document.getElementById("search").addEventListener("keydown", async (e) => {
 
 // Function to handle button click
 async function handleButtonClick(place) {
+  
   try {
-    console.log('gonna request tihs place', place);
     const response = await fetch("/reviews", {
       method: "POST",
       headers: {
@@ -103,6 +103,7 @@ async function handleButtonClick(place) {
     });
 
     // TODO: handle response
+    console.log(response);
   } catch (error) {
     console.error("Error:", error);
   }

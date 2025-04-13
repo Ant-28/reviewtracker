@@ -13,6 +13,6 @@ def sentims(payload : Dict) -> Dict:
     all_reviews = " ".join(reviews)
     sentiments_dict, emotion_lvl, _, _ = emotion_analysis.emolex(all_reviews, EMOLEXL)
     # divide by emotion_lvl to get frequency
-    sentiment_frequency = {k:v/emotion_lvl for k, v in sentiments_dict.items()} if emotion_lvl
+    sentiment_frequency = {k:v/emotion_lvl for k, v in sentiments_dict.items()} if emotion_lvl != 0 else sentiments_dict
     payload["sentiments"] = sentiment_frequency 
     return payload

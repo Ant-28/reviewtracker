@@ -91,14 +91,22 @@ app.post("/reviews/", async (req, res) => {
   const execPromise = execAsync(`"python3" scraper/google_reviews.py "${q.fname} ${q.faddr}"`)
     .then(({ stdout }) => JSON.parse(stdout));
 
-  // Run both langflow fetch and google scraper in parallel.
-  try {
-    const [llmReviews, googleReviews] = await Promise.all([langflowPromise, execPromise]);
+  const execPromiseFB = execAsync(`"python3" scraper/facebook_reviews.py "${q.fname} ${q.faddr}"`)
+    .then(({ stdout }) => JSON.parse(stdout));
 
+  // Run both langflow fetch and google scraper in parallel. and facebook scraper
+  try {
+    const [langflowResponse, googleResponse, fbResponse] =
+      await Promise.allSettled([langflowPromise, execPromise, execPromiseFB]);
+
+    // Send back an object including keys for all three sources.
+    // If any promise was rejected, that key's value will be empty object in response.
     res.status(200).json({
-      llmReviews,
-      googleReviews
+      llmReviews: langflowResponse.status === "fulfilled" ? langflowResponse.value : [],
+      googleReviews: googleResponse.status === "fulfilled" ? googleResponse.value : {},
+      fbReviews: fbResponse.status === "fulfilled" ? fbResponse.value : {}
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).send();

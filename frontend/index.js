@@ -105,7 +105,7 @@ async function handleButtonClick(place) {
       body: JSON.stringify(place)
     });
     const data = await response.json();
-    const {llmReviews, googleReviews} = data;
+    const {llmReviews, googleReviews, fbReviews} = data;
 
     // Hide progress bar
     document.getElementById("indeterminate").style.display = "none";
@@ -126,6 +126,15 @@ async function handleButtonClick(place) {
       const article = document.createElement("article");
       article.textContent = review;
       col2.appendChild(article);
+    });
+
+    // Populate Facebook reviews into col3
+    const col3 = document.getElementById("col3");
+    col3.innerHTML = ""; // Clear existing reviews
+    fbReviews.reviews.forEach(review => {
+      const article = document.createElement("article");
+      article.textContent = review;
+      col3.appendChild(article);
     });
 
     // Populate overall rating amount

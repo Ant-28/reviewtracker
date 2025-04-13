@@ -2,3 +2,5 @@ venv
 .env
 test.py
 node_modules/
+Cache/
+Code Cache/

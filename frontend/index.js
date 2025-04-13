@@ -1,13 +1,9 @@
 const reviews = [
   [
-    "I am a Google review",
-    "Cool place."
+    "..."
   ],
   [
-    "Here is a Yelp review",
-    "Best ice cream in the state",
-    "Facebook review here",
-    "my grandkids love this place"
+    "..."
   ]
 ];
 

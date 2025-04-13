@@ -13,7 +13,6 @@ We also notice that small business are more susceptible to review bombing and ot
 ![image](https://gist.github.com/user-attachments/assets/8be048bd-d27d-4532-ad34-45a01d17f51a)
 
 
-
 ## What it does
 
 Our software collects reviews from Google Maps, Facebook and a multitude of other platforms. We combined deterministic scraping with more entropic LLM scraping using a GPT-4 powered AI agent via [Langflow](https://www.langflow.org/). 
@@ -32,11 +31,9 @@ For the sentiment analysis, we used the [NRC](https://saifmohammad.com/WebPages/
 
 Our first challenge involved *consistent loading* and preventing our client from being flagged as a spambot. We addressed this by using an "undectectable" driver. 
 
-<!-- reword! -->
 Since we were collecting reviews from multiple sources, we had to combine our review data with our sentiment analysis corpus.  
 
 Furthermore, when using LLMs to aggregate reviews, their reliability varied significantly depending on the model used. Notably, `Gemini 2.0-pro-exp` sometimes found fewer reviews or threw errors, while `GPT 4o-mini` was more consistent as it is a production-ready LLM.
-
 
 
 ## Accomplishments that we're proud of
@@ -45,7 +42,6 @@ To begin with, 2/3rds of our team have never participated in a hackathon, so thi
 
 Additionally, we are proud of writing decent webscrapers and handling multiple failure states, ensuring all failures are as graceful as possible. 
 
-<!-- reword! -->
 Lastly, collating all of this data over a span of 2 days is a daunting task that we successfully tackled.
 
 ## What we learned
@@ -55,7 +51,6 @@ Firstly, we prioritized software *performance* over *aesthetics*. In other words
 We also discussed approaches frequently, especially when ideas weren't working. This allowed to pivot our design and implementation to match our goals more closely. 
 
 Since we initially planned to use APIs, we learnt to leverage webscraping as a contingency whenever possible. 
-
 
 ## What's next for Review Raven
 

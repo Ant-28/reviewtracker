@@ -111,7 +111,7 @@ def main(argv):
     # options.add_experimental_option("prefs", preferences)
     driver = ourChrome(
         use_subprocess=False,
-        headless=True,
+        headless=False,
         version_main=112
         )
     # driver = webdriver.Chrome(options=options)

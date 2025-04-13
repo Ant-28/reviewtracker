@@ -132,11 +132,12 @@ def main(argv):
 if __name__ == "__main__":
     try:
         main(argv)
-    except:
+    except Exception as e:
         print(json.dumps({
             "reviews" : [],
             "text_avg_rating" : 0,
             "overall_avg_rating" : 0,
             "sentiments" : {},
         }))
+        print(e)
 

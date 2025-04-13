@@ -113,7 +113,7 @@ def get_reviews_by_address(address, driver):
         rating = len(star.find_elements(By.XPATH, './/span[@class="hCCjke google-symbols NhBTye elGi1d"]'))
         stars.append(rating)
 
-    average_rating = sum(stars[:len(reviews)]) / len(reviews)
+    average_rating = (sum(stars[:len(reviews)]) / len(reviews)) if len(reviews) > 0 else 0
     # print(len(reviews))
     reviews_dict = {
         "reviews": [review.text for review in reviews],

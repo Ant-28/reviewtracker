@@ -62,7 +62,7 @@ app.post("/reviews/", async (req, res) => {
             res.status(500).send();
           }
           else{
-            
+            // log your stderr even on success
             console.error(stderr);
             res.status(200).send(JSON.parse(stdout));
           }

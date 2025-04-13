@@ -1,7 +1,9 @@
 # Review Raven
 
 
-bruno mars
+A review aggregator website, collecting Google Maps, Facebook and more!
+
+
 
 ## Setup:
 

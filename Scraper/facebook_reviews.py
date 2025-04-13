@@ -98,19 +98,21 @@ def main(argv):
     # options.add_experimental_option(
     # "prefs", {"profile.managed_default_content_settings.images": 2}
     # )
-    options.add_argument("--headless")
+    options.add_argument("--headless=new")
     # preferences = {
     # "profile.managed_default_content_settings.images": 2,
     # "profile.default_content_settings.images": 2
     # }
     
     options.add_argument(f'--disk-cache-dir={os.path.dirname(os.path.realpath(__file__))}')
+    # options.add_argument("--window-size=0,0")
     # remove devtools listening
     # options.add_experimental_option('excludeSwitches', ['enable-logging'])
     # options.add_experimental_option("prefs", preferences)
     driver = ourChrome(
-        headless=False,
         use_subprocess=False,
+        headless=True,
+        version_main=112
         )
     # driver = webdriver.Chrome(options=options)
     # print(f"\033[31;1;{argv[1]}\033[0m", file=stderr)

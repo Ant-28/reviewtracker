@@ -113,7 +113,7 @@ async function handleButtonClick(place) {
     // Populate Google reviews into page
     const col1 = document.getElementById("col1");
     col1.innerHTML = ""; // Clear existing reviews
-    googleReviews.reviews.forEach(review => {
+    googleReviews.reviews?.forEach(review => {
       const article = document.createElement("article");
       article.textContent = review;
       col1.appendChild(article);
@@ -137,8 +137,11 @@ async function handleButtonClick(place) {
       col3.appendChild(article);
     });
 
-    // Populate overall rating amount
+    // Populate overall rating amount and subtitle
     document.getElementById('google-progress').value = googleReviews.overall_avg_rating;
+    document.getElementById('google-subtitle').textContent = `Google rating: ${googleReviews.overall_avg_rating} ★`;
+    document.getElementById('facebook-progress').value = fbReviews.overall_avg_rating;
+    document.getElementById('facebook-subtitle').textContent = `Facebook rating: ${fbReviews.overall_avg_rating} ★`;
 
     // Show sentiment on page.
     // Extract top 3 sentiments

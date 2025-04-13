@@ -47,6 +47,10 @@
       overflow: auto;
       font-size: .8rem;
     }
+
+    h3 {
+      margin-top: 8px;
+    }
   </style>
 </head>
 
@@ -67,7 +71,8 @@
     <div class="grid">
       <div>
         <h3>Statistics</h3>
-        <div>Google rating</div>&nbsp;<progress id="google-progress" value="3.5" max="5"></progress>
+        <div id="google-subtitle">Google rating</div><progress id="google-progress" value="3.5" max="5"></progress>
+        <div id="facebook-subtitle">Facebook rating</div><progress id="facebook-progress" value="3.5" max="5"></progress>
       </div>
       <div>
         <h3>Sentiment</h3>

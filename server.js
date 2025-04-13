@@ -1,6 +1,6 @@
 // const require = NodeJS.require
 require("dotenv").config();
-const {exec} = require("node:child_process");
+const { exec } = require("node:child_process");
 const express = require("express");
 
 const app = express();
@@ -36,45 +36,59 @@ app.get("/locations/", async (req, res) => {
         fname: obj.displayName.text,
       };
     });
-    res.status(200).send(newRes.slice(0,10));
+    res.status(200).send(newRes.slice(0, 10));
   } catch (error) {
     console.error(error);
     res.status(500).send();
   }
-  
+
 });
 
 
 // /reviews/?addrText=...
 app.post("/reviews/", async (req, res) => {
-    // get to neil's stuff
-    // TODO change this to 200 on completion
+  const q = req.body;
 
+  const langflow_payload = {
+    "input_value": `${q.fname} ${q.faddr}`,
+    "output_type": "chat",
+    "input_type": "chat"
+  };
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(langflow_payload)
+  };
 
-    const q = req.body;
+  fetch('http://127.0.0.1:7860/api/v1/run/01b79eb9-710c-4d6c-ad1b-cb83f245d67c', options)
+    .then(response => response.json())
+    .then(response => console.log("LANGFLOW RESPONSE:", response.outputs.outputs))
+    .catch(err => console.error(err));
 
-    try {
-      exec(`"python3" scraper/google_reviews.py "${q.fname} ${q.faddr}"`, 
-        (error, stdout, stderr) => {
-          if (error){
-            console.error(error);
-            console.error("∃ error")
-            res.status(500).send();
-          }
-          else{
-            
-            console.error(stderr);
-            res.status(200).send(JSON.parse(stdout));
-          }
-          
+  try {
+    exec(`"python3" scraper/google_reviews.py "${q.fname} ${q.faddr}"`,
+      (error, stdout, stderr) => {
+        if (error) {
+          console.error(error);
+          console.error("∃ error")
+          res.status(500).send();
         }
-      );
-    }
-    catch (error){
-        console.error(error);
-        res.status(500).send();
-    }
-    
+        else {
+
+          console.error(stderr);
+          res.status(200).send(JSON.parse(stdout));
+        }
+
+      }
+    );
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send();
+  }
+
 });
 
 app.listen(PORT, () => {

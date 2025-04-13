@@ -2,6 +2,17 @@
 
 Review management is quite cumbersome for a plethora of business owners. Having interacted frequently with small businesses and startups, we are attuned to the need for valuable feedback and summaries.  With that in mind, we decided to design a review aggregator for small business, akin to Metacritic. 
 
+### Relevance to track (Justice)
+
+Our project aims to level the playing field for small businesses, especially in an era of stunted economic growth. 
+
+We designed this app to bring small businesses more insight about their community and their general perception, which is crucial in our modern information-centric era. 
+
+We also notice that small business are more susceptible to review bombing and other forms of review biases. For example, we noticed a discrepancy in the following figure: reviews with text tend to show businesses in a more positive light than all available reviews. This is especially true for local businesses, given the smaller numbers of review available.. 
+
+![image](https://gist.github.com/user-attachments/assets/8be048bd-d27d-4532-ad34-45a01d17f51a)
+
+
 
 ## What it does
 

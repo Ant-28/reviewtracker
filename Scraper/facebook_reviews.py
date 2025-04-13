@@ -56,7 +56,7 @@ def get_facebook_site(name : str, driver: uc.Chrome) -> Optional[str]:
     wait = WebDriverWait(driver, 15)    
 
     # Wait for the search box to be present and input the address
-    close_box = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@aria-label="Close"]')))
+    close_box = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@aria-label="Close"]')))
     driver.execute_script("arguments[0].click();", close_box)
     review_score_xpath = '/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[1]/div[2]/div/div[1]/div/div/div/div/div[2]/div[2]/div/ul/div[9]/div[2]/a/div/div/span'
     review_score_box = wait.until(EC.presence_of_element_located((By.XPATH, review_score_xpath)))

@@ -105,33 +105,43 @@ async function handleButtonClick(place) {
       body: JSON.stringify(place)
     });
     const data = await response.json();
+    const {llmReviews, googleReviews} = data;
 
     // Hide progress bar
     document.getElementById("indeterminate").style.display = "none";
 
-    // Populate reviews into page
+    // Populate Google reviews into page
     const col1 = document.getElementById("col1");
     col1.innerHTML = ""; // Clear existing reviews
-    data.reviews.forEach(review => {
+    googleReviews.reviews.forEach(review => {
       const article = document.createElement("article");
       article.textContent = review;
       col1.appendChild(article);
     });
 
+    // Populate LLM reviews into Other column
+    const col2 = document.getElementById("col2");
+    col2.innerHTML = ""; // Clear existing reviews
+    llmReviews.forEach(review => {
+      const article = document.createElement("article");
+      article.textContent = review;
+      col2.appendChild(article);
+    });
+
     // Populate overall rating amount
-    document.getElementById('google-progress').value = data.overall_avg_rating;
+    document.getElementById('google-progress').value = googleReviews.overall_avg_rating;
 
     // Show sentiment on page.
     // Extract top 3 sentiments
-    const topSentiments = Object.entries(data.sentiments)
+    const topSentiments = Object.entries(googleReviews.sentiments)
       .sort(([, a], [, b]) => b - a) // Sort by float values in descending order
       .slice(0, 3) // Take the top 3
       .map(([key]) => key); // Extract the keys
     // Display the top 3 sentiments
     document.getElementById("sentiment").textContent = `Top sentiments: \r\n
-      ${emojiMap[topSentiments[0]]} ${topSentiments[0]} (${(data.sentiments[topSentiments[0]] * 100).toFixed(2)}%) \r\n
-      ${emojiMap[topSentiments[1]]} ${topSentiments[1]} (${(data.sentiments[topSentiments[1]] * 100).toFixed(2)}%) \r\n
-      ${emojiMap[topSentiments[2]]} ${topSentiments[2]} (${(data.sentiments[topSentiments[2]] * 100).toFixed(2)}%)`;
+      ${emojiMap[topSentiments[0]]} ${topSentiments[0]} (${(googleReviews.sentiments[topSentiments[0]] * 100).toFixed(2)}%) \r\n
+      ${emojiMap[topSentiments[1]]} ${topSentiments[1]} (${(googleReviews.sentiments[topSentiments[1]] * 100).toFixed(2)}%) \r\n
+      ${emojiMap[topSentiments[2]]} ${topSentiments[2]} (${(googleReviews.sentiments[topSentiments[2]] * 100).toFixed(2)}%)`;
   } catch (error) {
     console.error("Error:", error);
   }

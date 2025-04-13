@@ -44,6 +44,16 @@ app.get("/locations/", async (req, res) => {
 
 });
 
+function execAsync(command) {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        return reject(error);
+      }
+      resolve({ stdout, stderr });
+    });
+  });
+}
 
 // /reviews/?addrText=...
 app.post("/reviews/", async (req, res) => {
@@ -62,29 +72,34 @@ app.post("/reviews/", async (req, res) => {
     body: JSON.stringify(langflow_payload)
   };
 
-  fetch('http://127.0.0.1:7860/api/v1/run/01b79eb9-710c-4d6c-ad1b-cb83f245d67c', options)
+  const langflowPromise = fetch('http://127.0.0.1:7860/api/v1/run/01b79eb9-710c-4d6c-ad1b-cb83f245d67c', options)
     .then(response => response.json())
-    .then(response => console.log("LANGFLOW RESPONSE:", response.outputs.outputs))
-    .catch(err => console.error(err));
+    .then(response => {
+      // Pull JSON block out of llm response
+      const codeblock_response = response["outputs"][0]["outputs"][0]["results"]["message"]["text"];
+      // Strip out leading ```json\n and trailing \n```
+      const json_string = codeblock_response.substring(8, codeblock_response.length - 3);
+      const json_obj = JSON.parse(json_string);
 
+      const allReviews = json_obj.flatMap(source => 
+        source.reviews.map(r => r.review)
+      );
+      console.log("ALL REVIEWS", allReviews);
+      return allReviews;
+    });
+
+  const execPromise = execAsync(`"python3" scraper/google_reviews.py "${q.fname} ${q.faddr}"`)
+    .then(({ stdout }) => JSON.parse(stdout));
+
+  // Run both langflow fetch and google scraper in parallel.
   try {
-    exec(`"python3" scraper/google_reviews.py "${q.fname} ${q.faddr}"`,
-      (error, stdout, stderr) => {
-        if (error) {
-          console.error(error);
-          console.error("∃ error")
-          res.status(500).send();
-        }
-        else {
+    const [llmReviews, googleReviews] = await Promise.all([langflowPromise, execPromise]);
 
-          console.error(stderr);
-          res.status(200).send(JSON.parse(stdout));
-        }
-
-      }
-    );
-  }
-  catch (error) {
+    res.status(200).json({
+      llmReviews,
+      googleReviews
+    });
+  } catch (error) {
     console.error(error);
     res.status(500).send();
   }

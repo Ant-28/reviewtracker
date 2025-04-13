@@ -57,7 +57,7 @@
 <body>
   <main class="container">
     <img src="birbLogo.png" alt="Logo" width="64" height="64"> <h2 style="display: inline;">Review Raven</h2>
-    <input autofocus type="text" id="search" placeholder="Search for your business..." />
+    <input autofocus type="text" id="search" placeholder="Search for your business..." autocomplete="off" />
     <p><strong>Business</strong>:
       <span id="business-name">
         --
@@ -71,8 +71,8 @@
     <div class="grid">
       <div>
         <h3>Statistics</h3>
-        <div id="google-subtitle">Google rating</div><progress id="google-progress" value="3.5" max="5"></progress>
-        <div id="facebook-subtitle">Facebook rating</div><progress id="facebook-progress" value="3.5" max="5"></progress>
+        <div id="google-subtitle">Google rating</div><progress id="google-progress" value="0" max="5"></progress>
+        <div id="facebook-subtitle">Facebook rating</div><progress id="facebook-progress" value="0" max="5"></progress>
       </div>
       <div>
         <h3>Sentiment</h3>

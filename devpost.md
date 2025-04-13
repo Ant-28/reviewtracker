@@ -7,7 +7,9 @@ Review management is quite cumbersome for a plethora of business owners. Having 
 
 Our software collects reviews from Google Maps, Facebook and a multitude of other platforms. We combined deterministic scraping with more entropic LLM scraping using a GPT-4 powered AI agent via [Langflow](https://www.langflow.org/). 
 
-We also provide an average sentiment analysis across reviews, displaying the frequency of the top 3 sentiments. 
+We also provide an average sentiment analysis across reviews, displaying the frequency of the top 3 sentiments.
+
+**Link**: [http://reviewraven.tech/](http://reviewraven.tech/) (Due to limitations of `.tech` domains, you must use `http://` to view the site. It also cannot interface with the backend, unless run locally.)
 
 ## How we built it
 
